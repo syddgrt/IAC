@@ -8,7 +8,7 @@ module storageModule './modules/storage.bicep' = {
   name: 'storageDeployment'
   params: {
     storageAccountName: 'trialstorageacc456987'
-    skuName: 'Standard_LRS' // Free-tier safe
+    skuName: 'Standard_LRS'
   }
 }
 output storageAccountId string = storageModule.outputs.storageAccountId
@@ -76,15 +76,45 @@ output virtualMachineId string = vmModule.outputs.virtualMachineId
 // Auto-Shutdown for VM
 // -----------------------
 resource autoShutdown 'Microsoft.DevTestLab/schedules@2018-09-15' = {
-  name: 'shutdown-computevm-TrialVm456987' // use a static or parameterized name
-
+  name: 'shutdown-computevm-TrialVm456987'
   location: resourceGroup().location
   properties: {
     status: 'Enabled'
     taskType: 'ComputeVmShutdownTask'
-    dailyRecurrence: { time: '22:00' } // UTC
+    dailyRecurrence: { time: '22:00' }
     timeZoneId: 'Singapore Standard Time'
     targetResourceId: vmModule.outputs.virtualMachineId
   }
 }
+
+@description('Allowed VM sizes')
+param allowedVMSizes array = [
+  'Standard_B1s'
+  'Standard_B1ms'
+  'Standard_B2s'
+]
+
+@description('Name of the resource group to assign policies to')
+param rgName string
+
+module customPolicies './modules/policy.bicep' = {
+  name: 'deployCustomPolicies'
+  scope: subscription() // <-- explicitly subscription
+  params: {
+    allowedVMSizes: allowedVMSizes
+  }
+}
+
+module assignPolicies './modules/policyAssignments.bicep' = {
+  name: 'assignPolicies'
+  scope: resourceGroup(rgName) // <-- explicitly resource group
+  params: {
+    rgName: rgName
+    storagePolicyId: customPolicies.outputs.storagePolicyId
+    vmSizePolicyId: customPolicies.outputs.vmSizePolicyId
+    allowedVMSizes: allowedVMSizes
+  }
+}
+
+
 
