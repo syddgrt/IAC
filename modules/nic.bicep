@@ -2,8 +2,6 @@ param nicName string
 param location string = resourceGroup().location
 param subnetId string
 param nsgId string
-param enableIPForwarding bool = false
-param privateIPAllocationMethod string = 'Dynamic'
 
 resource nic 'Microsoft.Network/networkInterfaces@2022-05-01' = {
   name: nicName
@@ -13,17 +11,13 @@ resource nic 'Microsoft.Network/networkInterfaces@2022-05-01' = {
       {
         name: 'ipconfig1'
         properties: {
-          subnet: {
-            id: subnetId
-          }
-          privateIPAllocationMethod: privateIPAllocationMethod
+          subnet: { id: subnetId }
+          privateIPAllocationMethod: 'Dynamic'
         }
       }
     ]
-    networkSecurityGroup: {
-      id: nsgId
-    }
-    enableIPForwarding: enableIPForwarding
+    networkSecurityGroup: { id: nsgId }
+    enableIPForwarding: false
   }
 }
 

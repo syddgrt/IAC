@@ -1,5 +1,4 @@
 param virtualmachineName string
-param skuName string
 param adminUsername string
 @secure()
 param adminPassword string
@@ -9,8 +8,8 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2021-07-01' = {
   name: virtualmachineName
   location: resourceGroup().location
   properties: {
-    hardwareProfile: {
-      vmSize: skuName
+    hardwareProfile: { 
+      vmSize: 'Standard_B1s' 
     }
     storageProfile: {
       imageReference: {
@@ -21,21 +20,20 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2021-07-01' = {
       }
       osDisk: {
         createOption: 'FromImage'
+        managedDisk: {
+          storageAccountType: 'Standard_LRS'
+        }
+        diskSizeGB: 30 // Free tier safe
       }
     }
     osProfile: {
-      computerName: virtualmachineName  // <-- FIXED: required!
+      computerName: virtualmachineName
       adminUsername: adminUsername
       adminPassword: adminPassword
     }
     networkProfile: {
       networkInterfaces: [
-        {
-          id: nicId
-          properties: {
-            primary: true
-          }
-        }
+        { id: nicId }
       ]
     }
   }
