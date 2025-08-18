@@ -3,7 +3,7 @@ name: Deploy Bicep to Azure
 on:
   push:
     branches:
-      - main   # 👈 triggers deployment when you push to main branch
+      - main   # 👈 triggers deployment when you push to main  /test the deployment
 
 jobs:
   deploy:
