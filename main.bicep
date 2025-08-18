@@ -45,7 +45,7 @@ output vnetId string = vnetModule.outputs.vnetId
 output subnetIds array = vnetModule.outputs.subnetIds
 
 // -----------------------
-// Network Interface Module
+// Network Interface Modulee
 // -----------------------
 module nicModule './modules/nic.bicep' = {
   name: 'nicDeployment'
