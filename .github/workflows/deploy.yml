@@ -3,7 +3,7 @@ name: Deploy Bicep to Azure
 on:
   push:
     branches:
-      - main   # 👈 triggers deployment when you push to main  /test the deployment
+      - main
 
 jobs:
   deploy:
@@ -18,15 +18,12 @@ jobs:
         with:
           creds: ${{ secrets.AZURECREDENTIALS }}
 
-      - name: Deploy Bicep files
+      - name: Deploy Bicep template
         uses: azure/arm-deploy@v1
         with:
           subscriptionId: ${{ fromJSON(secrets.AZURECREDENTIALS).subscriptionId }}
           scope: resourcegroup
-          resourceGroupName: TrialRG   # 👈 your RG name
-          template: ./main.bicep       # 👈 adjust if your entry file is named differently
-          parameters: | 
-            adminPassword=${{ secrets.ADMINPASSWORD }}
-            rgName=TrialRG
-
+          resourceGroupName: TrialRG
+          template: ./main.bicep
+          parameters: adminPassword=${{ secrets.ADMINPASSWORD }}
           failOnStdErr: false

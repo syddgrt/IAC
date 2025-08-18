@@ -1,8 +1,5 @@
 targetScope = 'resourceGroup'
 
-@description('Name of the resource group')
-param rgName string
-
 @description('Policy Definition ID for storage HTTPS enforcement')
 param storagePolicyId string
 

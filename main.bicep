@@ -94,9 +94,6 @@ param allowedVMSizes array = [
   'Standard_B2s'
 ]
 
-@description('Name of the resource group to assign policies to')
-param rgName string = 'TrialRG'
-
 module customPolicies './modules/policy.bicep' = {
   name: 'deployCustomPolicies'
   scope: subscription() // <-- explicitly subscription
@@ -107,9 +104,8 @@ module customPolicies './modules/policy.bicep' = {
 
 module assignPolicies './modules/policyAssignments.bicep' = {
   name: 'assignPolicies'
-  scope: resourceGroup(rgName) // <-- explicitly resource group
+  scope: resourceGroup() 
   params: {
-    rgName: rgName
     storagePolicyId: customPolicies.outputs.storagePolicyId
     vmSizePolicyId: customPolicies.outputs.vmSizePolicyId
     allowedVMSizes: allowedVMSizes
