@@ -16,13 +16,15 @@ jobs:
       - name: Log in to Azure
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.AzureCredentials }}
+          creds: ${{ secrets.AZURECREDENTIALS }}
 
       - name: Deploy Bicep files
         uses: azure/arm-deploy@v1
         with:
-          subscriptionId: ${{ fromJSON(secrets.AzureCredentials).subscriptionId }}
+          subscriptionId: ${{ fromJSON(secrets.AZURECREDENTIALS).subscriptionId }}
           scope: resourcegroup
           resourceGroupName: TrialRG   # 👈 your RG name
           template: ./main.bicep       # 👈 adjust if your entry file is named differently
+          parameters: adminPassword=${{ secrets.ADMINPASSWORD }}
+
           failOnStdErr: false
