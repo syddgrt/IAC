@@ -95,7 +95,7 @@ param allowedVMSizes array = [
 ]
 
 @description('Name of the resource group to assign policies to')
-param rgName string
+param rgName string = 'TrialRG'
 
 module customPolicies './modules/policy.bicep' = {
   name: 'deployCustomPolicies'

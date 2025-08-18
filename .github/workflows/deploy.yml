@@ -25,6 +25,8 @@ jobs:
           scope: resourcegroup
           resourceGroupName: TrialRG   # 👈 your RG name
           template: ./main.bicep       # 👈 adjust if your entry file is named differently
-          parameters: adminPassword=${{ secrets.ADMINPASSWORD }}
+          parameters: | 
+            adminPassword=${{ secrets.ADMINPASSWORD }}
+            rgName=TrialRG
 
           failOnStdErr: false
