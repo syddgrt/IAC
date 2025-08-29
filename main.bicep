@@ -72,6 +72,9 @@ module vmModule './modules/vm.bicep' = {
 }
 output virtualMachineId string = vmModule.outputs.virtualMachineId
 
+@description('Auto-shutdown time (HH:mm)')
+param autoShutdownTime string = '22:00' // ✅ added
+
 // -----------------------
 // Auto-Shutdown for VM
 // -----------------------
@@ -81,7 +84,7 @@ resource autoShutdown 'Microsoft.DevTestLab/schedules@2018-09-15' = {
   properties: {
     status: 'Enabled'
     taskType: 'ComputeVmShutdownTask'
-    dailyRecurrence: { time: '22:00' }
+    dailyRecurrence: { time: autoShutdownTime } // ✅ param
     timeZoneId: 'Singapore Standard Time'
     targetResourceId: vmModule.outputs.virtualMachineId
   }

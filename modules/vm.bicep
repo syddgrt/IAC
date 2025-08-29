@@ -4,12 +4,17 @@ param adminUsername string
 param adminPassword string
 param nicId string
 
+@description('VM size for deployment')
+param vmSize string = 'Standard_B1s' // define in parameter, no hardcode
+
+
+
 resource virtualMachine 'Microsoft.Compute/virtualMachines@2021-07-01' = {
   name: virtualmachineName
   location: resourceGroup().location
   properties: {
     hardwareProfile: { 
-      vmSize: 'Standard_B1s' 
+      vmSize: vmSize 
     }
     storageProfile: {
       imageReference: {
@@ -23,7 +28,7 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2021-07-01' = {
         managedDisk: {
           storageAccountType: 'Standard_LRS'
         }
-        diskSizeGB: 30 // Free tier safe
+        diskSizeGB: 30 // safe for free tier
       }
     }
     osProfile: {

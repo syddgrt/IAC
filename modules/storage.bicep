@@ -1,4 +1,5 @@
-param storageAccountName string 
+
+param storageAccountName string = 'st${uniqueString(resourceGroup().id)}'
 param skuName string
 
 var storageAccountId = resourceId('Microsoft.Storage/storageAccounts', storageAccountName)
