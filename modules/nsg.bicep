@@ -20,6 +20,19 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2022-05-01' = {
           destinationAddressPrefix: '*'
         }
       }
+      {
+        name: 'SMB-File-Sharing'
+        properties: {
+          priority: 1001
+          direction: 'Inbound'
+          access: 'Allow'
+          protocol: 'Tcp'
+          sourcePortRange: '*'
+          destinationPortRange: '445'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
+        }
+      }
     ]
   }
 }
